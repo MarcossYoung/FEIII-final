@@ -1,17 +1,32 @@
-import React from 'react'
-import Card from '../Components/Card'
+import React from 'react';
+import {useGlobalStates} from '../Components/utils/global.context';
+import Card from '../Components/Card';
+import {useState} from 'react';
+import {useEffect} from 'react';
 
 //Este componente debera ser estilado como "dark" o "light" dependiendo del theme del Context
 
 const Home = () => {
-  return (
-    <main className="" >
-      <h1>Home</h1>
-      <div className='card-grid'>
-        {/* Aqui deberias renderizar las cards */}
-      </div>
-    </main>
-  )
-}
+	const [fav, setFav] = useState([]);
 
-export default Home
+	const {data} = useGlobalStates();
+	console.log(data);
+
+	useEffect(() => {
+		localStorage.setItem('fav', JSON.stringify(fav));
+	}, [fav]);
+
+	return (
+		<main className=''>
+			<h1>Home</h1>
+
+			<div className='card-grid'>
+				{data?.map((d) => (
+					<Card data={d} fav={fav} setFav={setFav} />
+				))}
+			</div>
+		</main>
+	);
+};
+
+export default Home;
